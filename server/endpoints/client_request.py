@@ -9,7 +9,7 @@ CLIENT_OPTION_OLD='.ClientOption.yaml'
 class ClientRequest(object):
     
     hostname = socket.gethostname()
-    local_options = {}
+    local_options = None
     
     def __init__(self):
         try:
@@ -26,4 +26,7 @@ class ClientRequest(object):
             return None
         else :
             return self.local_options[hostname]
-        
+    
+    def store_data(self, ctxt, **kwargs):
+        raise NotImplementedError
+    

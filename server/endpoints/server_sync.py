@@ -1,10 +1,9 @@
 from oslo.config import cfg
+from server import  rpc
 import shutil
 import socket
 import yaml
 
-# CLIENT_OPTION = 'ClientOption.yaml'
-# CLIENT_OPTION_OLD='.ClientOption.yaml'
 CONF = cfg.CONF
 
 def operator_wrapper(operator):
@@ -37,6 +36,9 @@ class ConfigurationOperator(object):
         options = kwargs.pop('options')
         for option in options:
             self.local_options = dict(self.local_options, **option)
+            key = option.keys()[0]
+            rpc.cast(key, {}, 'option_sync', key, **option)
+            
     
     @operator_wrapper
     def remove(self, ctxt, **kwargs):
@@ -61,3 +63,6 @@ class MasterServerSync(object):
                 return options
         except:
             raise
+    
+    def test(self, ctxt, **kwargs):
+        return kwargs

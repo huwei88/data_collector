@@ -1,13 +1,19 @@
-NODES:
-  x240:
-    modules:
-    - {cycle: 1ws, driver: ddddd, name: module1, option: xxxx}
-    - {cycle: 1sss, driver: ddddd, name: module2, option: xxxx}
-  x230-huwei:
-    modules:
-    - {cycle: 1w2sd, driver: ddddd, name: module1, option: xxxx}
-    - {cycle: 1s, driver: ddsssssd, name: module2, option: xxxx}
-  x240s-huwei:
-    modules:
-    - {cycle: 1www, driver: ddddd, name: module1, option: xxxx}
-    - {cycle: 1s, driver: ddsssssd, name: module2, option: xxxx}
+ 'NODES':
+   'huwei-X230':
+     'modules':
+      - { 'cycle':  '1w2sd',  'driver':  'ddddd',
+         'name':  'module1',  'option':  'xxxx'}
+      - { 'cycle':  '1s',  'driver':  'ddsssssddd',
+       'name':  'module2',  'option':  'xxxx'}
+   'x240':
+     'modules':
+      - { 'cycle':  '1ws',  'driver':  'ddddd',
+         'name':  'module1',  'option':  'xxxx'}
+      - { 'cycle':  '1sss',  'driver':  'ddddd',
+       'name':  'module2',  'option':  'xxxx'}
+   'x240s-huwei':
+     'modules':
+      - { 'cycle':  '1www',  'driver':  'ddddd',
+         'name':  'module1',  'option':  'xxxx'}
+      - { 'cycle':  '1s',  'driver':  'ddsssssd',
+         'name':  'module2',  'option':  'xxxx'}
