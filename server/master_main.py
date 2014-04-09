@@ -10,20 +10,20 @@ from oslo.config import cfg
 import rpc
 import socket
 import shutil
-import sys
 import yaml
 
 LOG = logging.getLogger(__name__)
 
+
 basic_opts = [
               cfg.StrOpt('role',
-                         default = 'normal',
+                         default = 'master',
                          help = 'Assign the host role, master or normal'),
               cfg.StrOpt('option_file',
                          default = 'ClientOption.yaml',
                          help = 'The file stored the client options'),
               cfg.StrOpt('option_cache_file',
-                         default = '.nClientOption.yaml',
+                         default = '.ClientOption.yaml',
                          help = 'The cache file stored the before last changed client options.'),
               ]
 
@@ -77,13 +77,14 @@ taskManager = task_manager.TaskManager()
 def wrap_option(options):
     hostname = socket.gethostname()
     date = util.get_local_date()
-    return {'hostname': hostname, 'date': date,
-            'options': options}
+    return {'hostname':hostname, 'date': date,
+            'options':options}
 
 
 class Server(object):
 
     def __init__(self):
+        CONF.set_override('role','master')
         if CONF.get('role') == 'master':
             self.role = 'master'
             self.topic = CONF.get('server_topic')
@@ -96,32 +97,32 @@ class Server(object):
         taskManager.add_task(configuration_monitor_task)
 
     def master_init(self):
-        thread.start_new_thread(rpc.Service(CONF.get('master_server_topic'),
-                                     [server_sync.MasterServerSync(),
-                                     server_sync.ConfigurationOperator(),
-                                     ]).start, ())
+        thread.start_new_thread(rpc.Service(
+        									CONF.get('master_server_topic'),
+                                            [server_sync.MasterServerSync(),
+        									server_sync.ConfigurationOperator(),
+        									]
+										).start,()
+							   )
 
     def normal_init(self):
         ''' Send a request to master to sync the configurations. '''
         thread.start_new_thread(rpc.Service(CONF.get('server_topic'),
-                                   [server_sync.ConfigurationOperator(),
-                                   client_request.ClientRequest()],).start, ())
-
+                                               [server_sync.ConfigurationOperator(),
+                                                client_request.ClientRequest()],).start,())
         def sync_requests(topic):
             try:
                 options = rpc.call(topic, {}, 'sync_request')
                 with open(CONF.get('option_file'), 'w') as f:
                     yaml.safe_dump(options, f)
                 raise LoopingCallDone()
-            except IOError as e:
-                LOG.error(e)
+            except:
+                LOG.warn("timeout to connect to server.")
 
         try:
-            LoopingCall(f=sync_requests, cycle_index=10,
-                        topic=self.topic).start(5, 0)
-        except AttemptsFailure as e:
-# 			Log.error("Failed to synchronized from master after tried 10 times to connect master server.")
-            sys.exit(1)
+         	LoopingCall(f=sync_requests, cycle_index=10,topic=self.topic).start(1, 0)
+        except AttemptsFailure:
+			Log.error("Failed to synchronized from master after tried 10 times to connect master server.")
 
     def start_service(self):
 #         import pdb;pdb.set_trace()
@@ -129,7 +130,7 @@ class Server(object):
             self.master_init()
         else:
             self.normal_init()
-        taskManager.wait()
+    	taskManager.wait()
 
     def configuration_monitor(self):
         if not os.path.exists(CONF.get('option_file')):
@@ -223,6 +224,7 @@ def init_logger():
     logging.getLogger('').addHandler(console)
 
 
-if __name__ == '__main__':
-    init_logger()
+
+if __name__== '__main__':
+#     init_logger()
     Server().start_service()

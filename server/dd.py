@@ -67,5 +67,5 @@ class ServerListener(object):
 
 kwargs0={'topic_':'test'}
 kwargs1={'topic_':'test1'}
-print rpc.call(topic='test1',ctxt={},method='test',**kwargs1)
-print rpc.call(topic='test1',ctxt={},method='test',**kwargs1)
+print rpc.call(topic='test',ctxt={},method='option_add',server='huwei-X230',**kwargs1)
+print rpc.call(topic='test1',ctxt={},method='option_add',**kwargs1)

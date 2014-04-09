@@ -28,6 +28,7 @@ def call(topic, ctxt, method, timeout=10, server=None, version='1.0', **kwargs):
     transport = messaging.get_transport(cfg.CONF)
     target = messaging.Target(topic=topic, server=server, version=version)
     client = messaging.RPCClient(transport, target)
+    cctxt = client.prepare(timeout=timeout)
     return client.call(ctxt, method, **kwargs)
 
 def cast(topic, ctxt, method, server=None, version='1.0', **kwargs):

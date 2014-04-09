@@ -1,6 +1,8 @@
 import datetime
 import hashlib
+import thread
 import threading
+import time
 
 
 class Singleton(object):
@@ -61,3 +63,13 @@ def get_local_date():
 def get_utc_date():
     date_format = '%Y-%m-%d %H:%M:%S'
     return datetime.datetime.utcnow().strftime(date_format)
+
+def delay_call(delay_seconds=0, fun=None, *args):
+    """
+    After 'delay_seconds' seconds, make the fun call.
+    """
+    def delay(*args):
+        time.sleep(delay_seconds)
+        fun(args)
+    thread.start_new_thread(delay, args)
+
