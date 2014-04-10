@@ -1,3 +1,6 @@
 
+*.log
+.md5_cache
 .project
 .pydevproject
+*.pyc

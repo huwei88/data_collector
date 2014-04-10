@@ -19,7 +19,7 @@ Import related utilities and helper functions.
 
 import sys
 import traceback
-
+# from collector.modules.basic import collect_file_content
 
 def import_class(import_str):
     """Returns a class from a string including module and class."""

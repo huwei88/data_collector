@@ -1,0 +1,8 @@
+configurations:
+- collect_driver: basic.collect_file_content
+  cycle: 10s
+  data_names: [huwei3, huwei2]
+  kwargs:
+    files: [/home/huwei/ubuntu.pub, /home/huwei/dic.txt]
+  name: file content
+  storage_driver: default

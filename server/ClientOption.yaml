@@ -1,19 +1,18 @@
- 'NODES':
-   'huwei-X230':
-     'modules':
-      - { 'cycle':  '1w2sd',  'driver':  'ddddd',
-         'name':  'module1',  'option':  'xxxx'}
-      - { 'cycle':  '1s',  'driver':  'ddsssssddd',
-       'name':  'module2',  'option':  'xxxx'}
-   'x240':
-     'modules':
-      - { 'cycle':  '1ws',  'driver':  'ddddd',
-         'name':  'module1',  'option':  'xxxx'}
-      - { 'cycle':  '1sss',  'driver':  'ddddd',
-       'name':  'module2',  'option':  'xxxx'}
-   'x240s-huwei':
-     'modules':
-      - { 'cycle':  '1www',  'driver':  'ddddd',
-         'name':  'module1',  'option':  'xxxx'}
-      - { 'cycle':  '1s',  'driver':  'ddsssssd',
-         'name':  'module2',  'option':  'xxxx'}
+NODES:
+  huwei_pc:
+    modules:
+    - collect_driver: basic.collect_file_content
+      cycle: 10s
+      data_names: [huwei3, huwei2]
+      kwargs:
+        files: [/home/huwei/ubuntu.pub, /home/huwei/dic.txt]
+      name: file content
+      storage_driver: default
+  x240:
+    modules:
+    - {cycle: 1ws, driver: ddddd, name: module1, option: xxxx}
+    - {cycle: 1sss, driver: ddddd, name: module2, option: xxxx}
+  x240s-huwei:
+    modules:
+    - {cycle: 1www, driver: ddddd, name: module1, option: xxxx}
+    - {cycle: 1s, driver: ddsssssd, name: module2, option: xxxx}
